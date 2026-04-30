@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use rust_decimal::Decimal;
 
 impl Kalshi {
     /// Retrieves information about a single event by its ticker.
@@ -337,9 +338,16 @@ pub struct Trade {
     pub trade_id: String,
     pub taker_side: String,
     pub ticker: String,
-    pub count_fp: f64,
-    pub yes_price_dollars: f64,
-    pub no_price_dollars: f64,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub count_fp: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_price_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_price_dollars: Decimal,
+
     pub created_time: String,
 }
 

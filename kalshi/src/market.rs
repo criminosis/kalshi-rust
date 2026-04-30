@@ -1,5 +1,6 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use rust_decimal::Decimal;
 
@@ -348,7 +349,7 @@ pub struct Trade {
     #[serde(with = "rust_decimal::serde::str")]
     pub no_price_dollars: Decimal,
 
-    pub created_time: String,
+    pub created_time: DateTime<Utc>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]

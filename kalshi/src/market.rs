@@ -102,17 +102,21 @@ impl Kalshi {
         Ok((resp.ticker, resp.history))
     }
 
-    /// Retrieves public trades for one or more markets.
+    /// Retrieves public trades for one market.
     pub async fn get_trades(
         &self,
-        tickers: Option<String>,
+        ticker: Option<String>,
         limit: Option<i64>,
         cursor: Option<String>,
+        min_ts: Option<i64>,
+        max_ts: Option<i64>,
     ) -> Result<(Vec<Trade>, Option<String>), KalshiError> {
         let mut params = Vec::new();
-        add_param!(params, "tickers", tickers);
+        add_param!(params, "ticker", ticker);
         add_param!(params, "limit", limit);
         add_param!(params, "cursor", cursor);
+        add_param!(params, "min_ts", min_ts);
+        add_param!(params, "max_ts", max_ts);
 
         let url = self.build_url_with_params("/markets/trades", params)?;
         let resp: PublicTradesResponse = self.http_get(url).await?;
@@ -333,9 +337,9 @@ pub struct Trade {
     pub trade_id: String,
     pub taker_side: String,
     pub ticker: String,
-    pub count: u32,
-    pub yes_price: u32,
-    pub no_price: u32,
+    pub count_fp: f64,
+    pub yes_price_dollars: f64,
+    pub no_price_dollars: f64,
     pub created_time: String,
 }
 

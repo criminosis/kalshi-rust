@@ -183,8 +183,6 @@ pub struct Market {
     pub market_type: String,
     #[deprecated]
     pub title: String,
-    #[deprecated]
-    pub subtitle: String,
     pub yes_sub_title: String,
     pub no_sub_title: String,
     pub created_time: String,
@@ -199,22 +197,12 @@ pub struct Market {
     pub status: String,
     #[deprecated]
     pub response_price_units: String,
-    #[deprecated]
-    pub yes_bid: f64,
     pub yes_bid_dollars: Option<String>,
     pub yes_bid_size_fp: Option<String>,
-    #[deprecated]
-    pub yes_ask: f64,
     pub yes_ask_dollars: Option<String>,
     pub yes_ask_size_fp: Option<String>,
-    #[deprecated]
-    pub no_bid: f64,
     pub no_bid_dollars: Option<String>,
-    #[deprecated]
-    pub no_ask: f64,
     pub no_ask_dollars: Option<String>,
-    #[deprecated]
-    pub last_price: f64,
     pub last_price_dollars: Option<String>,
     pub volume: i64,
     pub volume_fp: Option<String>,
@@ -225,21 +213,10 @@ pub struct Market {
     pub fractional_trading_enabled: bool,
     pub open_interest: i64,
     pub open_interest_fp: Option<String>,
-    #[deprecated]
-    pub notional_value: i64,
     pub notional_value_dollars: Option<String>,
-    #[deprecated]
-    pub previous_yes_bid: i64,
     pub previous_yes_bid_dollars: Option<String>,
-    #[deprecated]
-    pub previous_yes_ask: i64,
     pub previous_yes_ask_dollars: Option<String>,
-    #[deprecated]
-    pub previous_price: i64,
     pub previous_price_dollars: Option<String>,
-    #[deprecated]
-    pub liquidity: i64,
-    #[deprecated]
     pub liquidity_dollars: Option<String>,
     pub settlement_value: Option<i64>,
     pub settlement_value_dollars: Option<String>,

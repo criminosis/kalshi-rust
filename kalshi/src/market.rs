@@ -267,6 +267,7 @@ pub struct Event {
     pub strike_period: Option<String>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Series {
     pub additional_prohibitions: Vec<String>,

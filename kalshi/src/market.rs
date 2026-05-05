@@ -2,6 +2,7 @@ use super::Kalshi;
 use crate::kalshi_error::*;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use serde_with::{serde_as, DefaultOnNull};
 use rust_decimal::Decimal;
 
 impl Kalshi {
@@ -277,6 +278,8 @@ pub struct Series {
     pub frequency: String,
     pub product_metadata: Option<serde_json::Value>,
     pub settlement_sources: Vec<SettlementSource>,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)] 
     pub tags: Vec<String>,
     pub ticker: String,
     pub title: String,

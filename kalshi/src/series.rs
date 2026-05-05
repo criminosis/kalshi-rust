@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::{serde_as, DefaultOnNull};
 
 impl Kalshi {
     /// Retrieves a list of series filtered by category, with optional product metadata and tags.
@@ -135,8 +136,11 @@ impl Kalshi {
 // PRIVATE RESPONSES
 // -----------------------------------------------
 
+#[serde_as]
 #[derive(Debug, Deserialize, Serialize)]
 struct SeriesListResponse {
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)] 
     series: Vec<crate::Series>,
 }
 

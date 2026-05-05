@@ -37,12 +37,14 @@ impl Kalshi {
         category: String,
         include_product_metadata: Option<bool>,
         tags: Option<String>,
+        min_updated_ts: Option<i64>,
     ) -> Result<Vec<crate::Series>, KalshiError> {
         let mut params: Vec<(&str, String)> = Vec::with_capacity(3);
         // API requires category
         params.push(("category", category));
         add_param!(params, "include_product_metadata", include_product_metadata);
         add_param!(params, "tags", tags);
+        add_param!(params, "min_updated_ts", min_updated_ts);
 
         let url = self.build_url_with_params("/series", params)?;
         let resp: SeriesListResponse = self.http_get(url).await?;

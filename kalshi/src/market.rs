@@ -139,15 +139,21 @@ struct SingleMarketResponse {
     pub market: Market,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicMarketsResponse {
     pub cursor: Option<String>,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub markets: Vec<Market>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicEventsResponse {
     pub cursor: Option<String>,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub events: Vec<Event>,
 }
 
@@ -161,17 +167,23 @@ struct OrderBookResponse {
     pub orderbook: Orderbook,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct MarketHistoryResponse {
     #[allow(dead_code)]
     pub cursor: Option<String>,
     pub ticker: String,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub history: Vec<Snapshot>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicTradesResponse {
     pub cursor: Option<String>,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub trades: Vec<Trade>,
 }
 
@@ -270,6 +282,8 @@ pub struct Event {
 #[serde_as]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Series {
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub additional_prohibitions: Vec<String>,
     pub category: String,
     pub contract_terms_url: String,
@@ -278,9 +292,11 @@ pub struct Series {
     pub fee_type: String,
     pub frequency: String,
     pub product_metadata: Option<serde_json::Value>,
+    #[serde_as(deserialize_as = "DefaultOnNull")]
+    #[serde(default)]
     pub settlement_sources: Vec<SettlementSource>,
     #[serde_as(deserialize_as = "DefaultOnNull")]
-    #[serde(default)] 
+    #[serde(default)]
     pub tags: Vec<String>,
     pub ticker: String,
     pub title: String,

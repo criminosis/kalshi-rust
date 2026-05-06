@@ -1,3 +1,5 @@
+use chrono::{DateTime, Utc};
+use rust_decimal::Decimal;
 use serde::Deserialize;
 use super::KalshiChannel;
 
@@ -191,14 +193,25 @@ pub struct KalshiTickerMessage {
 pub struct KalshiTradeMessage {
     pub trade_id: String,
     pub market_ticker: String,
-    pub yes_price: u32,
-    pub yes_price_dollars: String,
-    pub no_price: u32,
-    pub no_price_dollars: String,
-    pub count: u32,
-    pub count_fp: String,
+    pub yes_price: Option<u32>,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_price_dollars: Decimal,
+
+    pub no_price: Option<u32>,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_price_dollars: Decimal,
+    
+    pub count: Option<u32>,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub count_fp: Decimal,
+    
     pub taker_side: KalshiSide,
-    pub ts: i64,
+    
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub ts: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Debug, Clone)]

@@ -195,7 +195,7 @@ pub struct Market {
     pub event_ticker: String,
     pub market_type: String,
     #[deprecated]
-    pub title: String,
+    pub title: Option<String>,
     pub yes_sub_title: String,
     pub no_sub_title: String,
     pub created_time: String,
@@ -235,7 +235,7 @@ pub struct Market {
     pub fee_waiver_expiration_time: Option<String>,
     pub early_close_condition: Option<String>,
     #[deprecated]
-    pub tick_size: i64,
+    pub tick_size: Option<i64>,
     pub strike_type: Option<String>,
     pub floor_strike: Option<f64>,
     pub cap_strike: Option<f64>,

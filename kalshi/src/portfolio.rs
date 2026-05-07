@@ -401,7 +401,7 @@ pub struct Order {
 pub struct Fill {
     pub fill_id: String,
     #[deprecated]
-    pub trade_id: String,
+    pub trade_id: Option<String>,
     pub order_id: String,
     pub client_order_id: Option<String>,
     pub ticker: String,

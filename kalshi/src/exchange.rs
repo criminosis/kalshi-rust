@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 impl Kalshi {
     /// Asynchronously retrieves the current status of the exchange.
@@ -158,9 +159,12 @@ struct GetMilestoneResponse {
     pub milestone: Milestone,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct GetMilestonesResponse {
     pub milestones: Vec<Milestone>,
+    
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 

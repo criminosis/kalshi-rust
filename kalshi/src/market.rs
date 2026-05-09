@@ -142,7 +142,9 @@ struct SingleMarketResponse {
 #[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicMarketsResponse {
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
+
     #[serde_as(deserialize_as = "DefaultOnNull")]
     #[serde(default)]
     pub markets: Vec<Market>,
@@ -151,7 +153,9 @@ struct PublicMarketsResponse {
 #[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicEventsResponse {
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
+
     #[serde_as(deserialize_as = "DefaultOnNull")]
     #[serde(default)]
     pub events: Vec<Event>,
@@ -171,7 +175,9 @@ struct OrderBookResponse {
 #[derive(Debug, Deserialize)]
 struct MarketHistoryResponse {
     #[allow(dead_code)]
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
+
     pub ticker: String,
     #[serde_as(deserialize_as = "DefaultOnNull")]
     #[serde(default)]
@@ -181,6 +187,7 @@ struct MarketHistoryResponse {
 #[serde_as]
 #[derive(Debug, Deserialize)]
 struct PublicTradesResponse {
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
     #[serde_as(deserialize_as = "DefaultOnNull")]
     #[serde(default)]

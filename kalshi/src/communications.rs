@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 impl Kalshi {
     /// Retrieves the public communications ID for the authenticated user.
@@ -131,9 +132,12 @@ struct GetCommunicationsIDResponse {
     pub communications_id: String,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct GetRFQsResponse {
     pub rfqs: Vec<RFQ>,
+
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 
@@ -147,9 +151,12 @@ struct GetRFQResponse {
     pub rfq: RFQ,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct GetQuotesResponse {
     pub quotes: Vec<Quote>,
+    
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 

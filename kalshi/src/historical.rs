@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 impl Kalshi {
     /// Retrieves the historical cutoff timestamps.
@@ -155,21 +156,30 @@ struct GetMarketCandlesticksHistoricalResponse {
     pub candlesticks: Vec<MarketCandlestickHistorical>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct HistoricalFillsResponse {
     pub fills: Vec<crate::portfolio::Fill>,
+    
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct HistoricalOrdersResponse {
     pub orders: Vec<crate::portfolio::Order>,
+    
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct HistoricalMarketsResponse {
     pub markets: Vec<crate::market::Market>,
+    
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 

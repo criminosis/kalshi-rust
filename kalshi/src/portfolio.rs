@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 use std::fmt;
 
 impl Kalshi {
@@ -265,9 +266,12 @@ struct SingleOrderResponse {
     pub order: Order,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct MultipleOrderResponse {
     pub orders: Vec<Order>,
+
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 
@@ -290,20 +294,27 @@ struct DecreaseOrderPayload {
     pub reduce_to: Option<i32>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct MultipleFillsResponse {
     pub fills: Vec<Fill>,
+
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct PortfolioSettlementResponse {
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
     pub settlements: Vec<Settlement>,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 pub struct GetPositionsResponse {
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
     pub event_positions: Vec<EventPosition>,
     pub market_positions: Vec<MarketPosition>,
@@ -577,9 +588,12 @@ pub struct SubaccountBalance {
     pub updated_ts: i64,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct GetSubaccountTransfersResponse {
     pub transfers: Vec<SubaccountTransfer>,
+
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 

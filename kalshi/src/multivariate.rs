@@ -1,6 +1,7 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 impl Kalshi {
     /// Retrieves a single multivariate event collection by its ticker.
@@ -96,9 +97,12 @@ struct GetMultivariateEventCollectionResponse {
     pub multivariate_contract: MultivariateEventCollection,
 }
 
+#[serde_as]
 #[derive(Debug, Deserialize)]
 struct GetMultivariateEventCollectionsResponse {
     pub multivariate_contracts: Vec<MultivariateEventCollection>,
+
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
     pub cursor: Option<String>,
 }
 

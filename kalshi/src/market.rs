@@ -32,6 +32,8 @@ impl Kalshi {
         event_ticker: Option<String>,
         max_close_ts: Option<i64>,
         min_close_ts: Option<i64>,
+        max_settled_ts: Option<i64>,
+        min_settled_ts: Option<i64>,
         tickers: Option<String>,
     ) -> Result<(Vec<Market>, Option<String>), KalshiError> {
         let mut params = Vec::new();
@@ -42,6 +44,8 @@ impl Kalshi {
         add_param!(params, "event_ticker", event_ticker);
         add_param!(params, "max_close_ts", max_close_ts);
         add_param!(params, "min_close_ts", min_close_ts);
+        add_param!(params, "max_settled_ts", max_settled_ts);
+        add_param!(params, "min_settled_ts", min_settled_ts);
         add_param!(params, "tickers", tickers);
 
         let url = self.build_url_with_params("/markets", params)?;

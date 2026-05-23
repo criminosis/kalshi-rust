@@ -377,37 +377,46 @@ struct BatchCancelOrdersIndividualResponse {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Order {
     pub order_id: String,
-    pub user_id: Option<String>,
+    pub user_id: String,
     pub client_order_id: String,
     pub ticker: String,
     pub side: Side,
     pub action: Action,
     pub status: OrderStatus,
-    pub yes_price: i64,
-    pub no_price: i64,
-    pub yes_price_dollars: Option<String>,
-    pub no_price_dollars: Option<String>,
-    pub fill_count: i32,
-    pub fill_count_fp: Option<String>,
-    pub remaining_count: i32,
-    pub remaining_count_fp: Option<String>,
-    pub initial_count: i32,
-    pub initial_count_fp: Option<String>,
-    pub taker_fees: i64,
-    pub taker_fees_dollars: Option<String>,
-    pub maker_fees: i64,
-    pub maker_fees_dollars: Option<String>,
-    pub taker_fill_cost: i64,
-    pub taker_fill_cost_dollars: Option<String>,
-    pub maker_fill_cost: i64,
-    pub maker_fill_cost_dollars: Option<String>,
-    pub queue_position: Option<i32>,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_price_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_price_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub fill_count_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub remaining_count_fp: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub initial_count_fp: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub taker_fees_dollars: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub maker_fees_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub taker_fill_cost_dollars: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub maker_fill_cost_dollars: Decimal,
+
     pub expiration_time: Option<String>,
     pub created_time: Option<String>,
     pub last_update_time: Option<String>,
     pub r#type: String,
     pub order_group_id: Option<String>,
-    pub self_trade_prevention_type: Option<String>,
+    pub self_trade_prevention_type: String,
     pub subaccount_number: Option<u32>,
 }
 

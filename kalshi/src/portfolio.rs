@@ -1,5 +1,6 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
 use std::fmt;
@@ -257,7 +258,8 @@ impl Kalshi {
 #[derive(Debug, Deserialize)]
 pub struct BalanceResponse {
     pub balance: i64,
-    pub balance_dollars: String,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub balance_dollars: Decimal,
     pub portfolio_value: i64,
     pub updated_ts: i64,
 }

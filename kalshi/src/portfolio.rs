@@ -257,6 +257,7 @@ impl Kalshi {
 #[derive(Debug, Deserialize)]
 pub struct BalanceResponse {
     pub balance: i64,
+    pub balance_dollars: String,
     pub portfolio_value: i64,
     pub updated_ts: i64,
 }

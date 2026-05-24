@@ -462,34 +462,22 @@ pub struct Settlement {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct EventPosition {
     pub event_ticker: String,
-    pub total_cost: i64,
-    pub total_cost_dollars: Option<String>,
-    pub total_cost_shares: i64,
-    pub total_cost_shares_fp: Option<String>,
-    pub event_exposure: i64,
-    pub event_exposure_dollars: Option<String>,
-    pub realized_pnl: i64,
-    pub realized_pnl_dollars: Option<String>,
-    pub fees_paid: i64,
-    pub fees_paid_dollars: Option<String>,
-    pub resting_order_count: Option<i32>,
+    pub total_cost_dollars: String,
+    pub total_cost_shares_fp: String,
+    pub event_exposure_dollars: String,
+    pub realized_pnl_dollars: String,
+    pub fees_paid_dollars: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct MarketPosition {
     pub ticker: String,
-    pub total_traded: i64,
-    pub total_traded_dollars: Option<String>,
-    pub position: i32,
-    pub position_fp: Option<String>,
-    pub market_exposure: i64,
-    pub market_exposure_dollars: Option<String>,
-    pub realized_pnl: i64,
-    pub realized_pnl_dollars: Option<String>,
-    pub resting_orders_count: i32,
-    pub fees_paid: i64,
-    pub fees_paid_dollars: Option<String>,
-    pub last_updated_ts: Option<String>,
+    pub total_traded_dollars: String,
+    pub position_fp: String,
+    pub market_exposure_dollars: String,
+    pub realized_pnl_dollars: String,
+    pub fees_paid_dollars: String,
+    pub last_updated_ts: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]

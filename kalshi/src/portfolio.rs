@@ -93,10 +93,18 @@ impl Kalshi {
         &self,
         limit: Option<i64>,
         cursor: Option<String>,
+        min_ts: Option<i64>,
+        max_ts: Option<i64>,
+        ticker: Option<String>,
+        event_ticker: Option<String>,
     ) -> Result<(Vec<Settlement>, Option<String>), KalshiError> {
         let mut params = Vec::new();
         add_param!(params, "limit", limit);
         add_param!(params, "cursor", cursor);
+        add_param!(params, "min_ts", min_ts);
+        add_param!(params, "max_ts", max_ts);
+        add_param!(params, "ticker", ticker);
+        add_param!(params, "event_ticker", event_ticker);
 
         let url = self.build_url_with_params("/portfolio/settlements", params)?;
         let resp: PortfolioSettlementResponse = self.http_get(url).await?;

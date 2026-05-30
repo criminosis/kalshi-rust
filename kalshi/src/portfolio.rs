@@ -1,7 +1,8 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
-use rust_decimal::Decimal;
-use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
+use rust_decimal::{Decimal, prelude::FromPrimitive};
+use serde::{Deserialize, Deserializer, Serialize};
 use serde_with::serde_as;
 use std::fmt;
 
@@ -450,21 +451,49 @@ pub struct Fill {
     pub subaccount_number: Option<u32>,
 }
 
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Copy)]
+#[serde(rename_all = "lowercase")]
+pub enum SettlementResult {
+    Yes,
+    No,
+    Scalar,
+    Void
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Settlement {
     pub ticker: String,
     pub event_ticker: String,
-    pub market_result: String,
-    pub yes_count: i64,
-    pub yes_count_fp: Option<String>,
-    pub yes_total_cost: i64,
-    pub no_count: i64,
-    pub no_count_fp: Option<String>,
-    pub no_total_cost: i64,
-    pub revenue: i64,
-    pub settled_time: String,
-    pub fee_cost: Option<String>,
-    pub value: Option<i64>,
+    pub market_result: SettlementResult,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_count_fp: Decimal,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_total_cost_dollars: Decimal,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_count_fp: Decimal,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_total_cost_dollars: Decimal,
+    pub settled_time: DateTime<Utc>,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub fee_cost: Decimal,
+
+    ///Total revenue earned from this settlement
+    #[serde(deserialize_with = "cents_to_dollars")]
+    #[serde(rename(deserialize = "revenue"))]
+    pub revenue_dollars: Decimal,
+    
+    //Payout of a single yes contract
+    #[serde(deserialize_with = "cents_to_dollars")]
+    #[serde(rename(deserialize = "value"))]
+    pub value_dollars: Decimal,
+}
+
+fn cents_to_dollars<'de, D>(deserializer: D) -> Result<Decimal, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let cents: u32 = Deserialize::deserialize(deserializer)?;
+    Ok(Decimal::from_u32(cents).unwrap() / Decimal::from_f64(100.0).unwrap())
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]

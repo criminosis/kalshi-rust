@@ -64,12 +64,18 @@ impl Kalshi {
         cursor: Option<String>,
         status: Option<String>,
         series_ticker: Option<String>,
+        min_close_ts: Option<i64>,
+        min_updated_ts: Option<i64>,
+        with_nested_markets: Option<bool>,
     ) -> Result<(Vec<Event>, Option<String>), KalshiError> {
         let mut params = Vec::new();
         add_param!(params, "limit", limit);
         add_param!(params, "cursor", cursor);
         add_param!(params, "status", status);
         add_param!(params, "series_ticker", series_ticker);
+        add_param!(params, "with_nested_markets", with_nested_markets);
+        add_param!(params, "min_close_ts", min_close_ts);
+        add_param!(params, "min_updated_ts", min_updated_ts);
 
         let url = self.build_url_with_params("/events", params)?;
         let resp: PublicEventsResponse = self.http_get(url).await?;

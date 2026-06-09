@@ -432,22 +432,25 @@ pub struct Order {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Fill {
     pub fill_id: String,
-    #[deprecated]
-    pub trade_id: Option<String>,
     pub order_id: String,
-    pub client_order_id: Option<String>,
     pub ticker: String,
-    pub side: Side,
-    pub action: Action,
-    pub count: i32,
-    pub count_fp: Option<String>,
-    pub yes_price: i64,
-    pub no_price: i64,
-    pub yes_price_fixed: Option<String>,
-    pub no_price_fixed: Option<String>,
+    pub outcome_side: Side,
+    pub book_side: BookSide,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub count_fp: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_price_dollars: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_price_dollars: Decimal,
+
     pub is_taker: bool,
-    pub created_time: String,
-    pub fee_cost: Option<String>,
+    pub created_time: DateTime<Utc>,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub fee_cost: Decimal,
     pub subaccount_number: Option<u32>,
 }
 
@@ -522,6 +525,13 @@ pub struct MarketPosition {
 pub enum Side {
     Yes,
     No,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum BookSide {
+    Bid,
+    Ask,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]

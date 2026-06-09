@@ -294,7 +294,6 @@ pub struct Event {
     pub sub_title: String,
     pub title: String,
     pub mutually_exclusive: bool,
-    pub category: String,
     pub markets: Option<Vec<Market>>,
     pub strike_date: Option<String>,
     pub strike_period: Option<String>,

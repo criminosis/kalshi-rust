@@ -227,8 +227,9 @@ pub struct KalshiFillMessage {
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_price_dollars: Decimal,
 
-    #[serde(with = "rust_decimal::serde::str")]
-    pub no_price_dollars: Decimal,
+    //Somehow this isn't a field here, remarkable
+    // #[serde(with = "rust_decimal::serde::str")]
+    // pub no_price_dollars: Decimal,
     
     #[serde(with = "rust_decimal::serde::str")]
     pub count_fp: Decimal,

@@ -1,6 +1,8 @@
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::Deserialize;
+use crate::BookSide;
+
 use super::KalshiChannel;
 
 #[derive(Debug, Deserialize, Clone)]
@@ -210,7 +212,7 @@ pub struct KalshiTradeMessage {
     
     pub taker_side: KalshiSide,
     
-    #[serde(with = "chrono::serde::ts_seconds")]
+    #[serde(with = "chrono::serde::ts_milliseconds")]
     pub ts: DateTime<Utc>,
 }
 
@@ -221,17 +223,28 @@ pub struct KalshiFillMessage {
     pub market_ticker: String,
     pub is_taker: bool,
     pub side: KalshiSide,
-    pub yes_price: u32,
-    pub yes_price_dollars: String,
-    pub count: u32,
-    pub count_fp: String,
-    pub fee_cost: String,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_price_dollars: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub count_fp: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub fee_cost: Decimal,
+
     pub action: KalshiAction,
-    pub ts: i64,
+    
+    #[serde(with = "chrono::serde::ts_milliseconds")]
+    pub ts_ms: DateTime<Utc>,
+
     pub client_order_id: Option<String>,
-    pub post_position: i32,
-    pub post_position_fp: String,
+    #[serde(with = "rust_decimal::serde::str")]
+    pub post_position_fp: Decimal,
     pub purchased_side: KalshiSide,
+    pub outcome_side: KalshiSide,
+    pub book_side: BookSide,
+
     pub subaccount: Option<u32>,
 }
 

@@ -226,6 +226,9 @@ pub struct KalshiFillMessage {
     
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_price_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub no_price_dollars: Decimal,
     
     #[serde(with = "rust_decimal::serde::str")]
     pub count_fp: Decimal,

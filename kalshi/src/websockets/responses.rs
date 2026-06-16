@@ -1,7 +1,7 @@
+use crate::{BookSide, SettlementResult};
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::Deserialize;
-use crate::BookSide;
 
 use super::KalshiChannel;
 
@@ -22,20 +22,11 @@ pub enum KalshiWebsocketResponse {
         msg: KalshiOrderbookDeltaMessage,
     },
     /// Market ticker information.
-    Ticker {
-        sid: u32,
-        msg: KalshiTickerMessage,
-    },
+    Ticker { sid: u32, msg: KalshiTickerMessage },
     /// Public trade notification.
-    Trade {
-        sid: u32,
-        msg: KalshiTradeMessage,
-    },
+    Trade { sid: u32, msg: KalshiTradeMessage },
     /// Private fill notification for the authenticated user.
-    Fill {
-        sid: u32,
-        msg: KalshiFillMessage,
-    },
+    Fill { sid: u32, msg: KalshiFillMessage },
     /// Market lifecycle event (v2).
     MarketLifecycleV2 {
         sid: u32,
@@ -98,11 +89,7 @@ pub enum KalshiWebsocketResponse {
         msg: KalshiSubscribedMessage,
     },
     /// Confirmation that an unsubscription was successful.
-    Unsubscribed {
-        id: Option<u32>,
-        sid: u32,
-        seq: u32,
-    },
+    Unsubscribed { id: Option<u32>, sid: u32, seq: u32 },
     /// Successful update operation or command response.
     Ok {
         id: Option<u32>,
@@ -178,7 +165,7 @@ pub struct KalshiTickerMessage {
 
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_bid_dollars: Decimal,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_bid_size_fp: Decimal,
 
@@ -202,7 +189,7 @@ pub struct KalshiTickerMessage {
 
     pub dollar_volume: u32,
     pub dollar_open_interest: u32,
-    
+
     #[serde(with = "chrono::serde::ts_milliseconds")]
     pub ts_ms: DateTime<Utc>,
 }
@@ -212,22 +199,22 @@ pub struct KalshiTradeMessage {
     pub trade_id: String,
     pub market_ticker: String,
     pub yes_price: Option<u32>,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_price_dollars: Decimal,
 
     pub no_price: Option<u32>,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub no_price_dollars: Decimal,
-    
+
     pub count: Option<u32>,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub count_fp: Decimal,
-    
+
     pub taker_side: KalshiSide,
-    
+
     #[serde(with = "chrono::serde::ts_milliseconds")]
     pub ts_ms: DateTime<Utc>,
 }
@@ -239,22 +226,21 @@ pub struct KalshiFillMessage {
     pub market_ticker: String,
     pub is_taker: bool,
     pub side: KalshiSide,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_price_dollars: Decimal,
 
     //Somehow this isn't a field here, remarkable
     // #[serde(with = "rust_decimal::serde::str")]
     // pub no_price_dollars: Decimal,
-    
     #[serde(with = "rust_decimal::serde::str")]
     pub count_fp: Decimal,
-    
+
     #[serde(with = "rust_decimal::serde::str")]
     pub fee_cost: Decimal,
 
     pub action: KalshiAction,
-    
+
     #[serde(with = "chrono::serde::ts_milliseconds")]
     pub ts_ms: DateTime<Utc>,
 
@@ -269,16 +255,42 @@ pub struct KalshiFillMessage {
 }
 
 #[derive(Deserialize, Debug, Clone)]
+#[serde(rename_all = "snake_case")]
+pub enum KalshiMarketLifecycleV2Event {
+    Created,
+    Activated,
+    Deactivated,
+    CloseDateUpdated,
+    Determined,
+    Settled,
+    PriceLevelStructureUpdated,
+    MetadataUpdated,
+}
+
+#[derive(Deserialize, Debug, Clone)]
 pub struct KalshiMarketLifecycleV2Message {
-    pub event_type: String,
+    pub event_type: KalshiMarketLifecycleV2Event,
     pub market_ticker: String,
-    pub open_ts: Option<i64>,
-    pub close_ts: Option<i64>,
-    pub result: Option<String>,
-    pub determination_ts: Option<i64>,
-    pub settlement_value: Option<String>,
-    pub settled_ts: Option<i64>,
+
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub open_ts: DateTime<Utc>,
+
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub close_ts: DateTime<Utc>,
+    pub result: Option<SettlementResult>,
+
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub determination_ts: DateTime<Utc>,
+
+    #[serde(with = "rust_decimal::serde::str_option", rename = "settlement_value")]
+    pub settlement_value_dollars: Option<Decimal>,
+
+    #[serde(with = "chrono::serde::ts_seconds_option")]
+    pub settled_ts: Option<DateTime<Utc>>,
     pub is_deactivated: Option<bool>,
+    pub yes_sub_title: Option<String>,
+    //price_level_structure
+    //floor_strike
     pub additional_metadata: Option<KalshiMarketAdditionalMetadata>,
 }
 

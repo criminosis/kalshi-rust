@@ -177,9 +177,6 @@ pub struct KalshiTickerMessage {
     pub market_id: String,
 
     #[serde(with = "rust_decimal::serde::str")]
-    pub price_dollars: Decimal,
-
-    #[serde(with = "rust_decimal::serde::str")]
     pub yes_bid_dollars: Decimal,
     
     #[serde(with = "rust_decimal::serde::str")]
@@ -190,6 +187,9 @@ pub struct KalshiTickerMessage {
 
     #[serde(with = "rust_decimal::serde::str")]
     pub yes_ask_size_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str", rename = "price_dollars")]
+    pub last_trade_price_dollars: Decimal,
 
     #[serde(with = "rust_decimal::serde::str")]
     pub last_trade_size_fp: Decimal,

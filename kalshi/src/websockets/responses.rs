@@ -175,20 +175,36 @@ pub struct KalshiOrderbookDeltaMessage {
 pub struct KalshiTickerMessage {
     pub market_ticker: String,
     pub market_id: String,
-    pub price: u32,
-    pub yes_bid: u32,
-    pub yes_ask: u32,
-    pub price_dollars: String,
-    pub yes_bid_dollars: String,
-    pub yes_ask_dollars: String,
-    pub volume: u32,
-    pub volume_fp: String,
-    pub open_interest: u32,
-    pub open_interest_fp: String,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub price_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_bid_dollars: Decimal,
+    
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_bid_size_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_ask_dollars: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub yes_ask_size_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub last_trade_size_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub volume_fp: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub open_interest_fp: Decimal,
+
     pub dollar_volume: u32,
     pub dollar_open_interest: u32,
-    pub ts: i64,
-    pub time: String,
+    
+    #[serde(with = "chrono::serde::ts_milliseconds")]
+    pub ts_ms: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Debug, Clone)]

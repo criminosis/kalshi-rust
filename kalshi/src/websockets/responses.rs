@@ -229,7 +229,7 @@ pub struct KalshiTradeMessage {
     pub taker_side: KalshiSide,
     
     #[serde(with = "chrono::serde::ts_milliseconds")]
-    pub ts: DateTime<Utc>,
+    pub ts_ms: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Debug, Clone)]

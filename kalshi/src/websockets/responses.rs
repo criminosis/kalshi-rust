@@ -288,7 +288,7 @@ pub struct KalshiMarketLifecycleV2Message {
     #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub determination_ts: Option<DateTime<Utc>>,
 
-    #[serde(with = "rust_decimal::serde::str_option", rename = "settlement_value")]
+    #[serde(default, with = "rust_decimal::serde::str_option", rename = "settlement_value")]
     pub settlement_value_dollars: Option<Decimal>,
 
     #[serde(default, with = "chrono::serde::ts_seconds_option")]

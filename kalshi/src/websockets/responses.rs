@@ -272,15 +272,16 @@ pub struct KalshiMarketLifecycleV2Message {
     pub event_type: KalshiMarketLifecycleV2Event,
     pub market_ticker: String,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub open_ts: DateTime<Utc>,
+    #[serde(with = "chrono::serde::ts_seconds_option")]
+    pub open_ts: Option<DateTime<Utc>>,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub close_ts: DateTime<Utc>,
+    #[serde(with = "chrono::serde::ts_seconds_option")]
+    pub close_ts: Option<DateTime<Utc>>,
+
     pub result: Option<SettlementResult>,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub determination_ts: DateTime<Utc>,
+    #[serde(with = "chrono::serde::ts_seconds_option")]
+    pub determination_ts: Option<DateTime<Utc>>,
 
     #[serde(with = "rust_decimal::serde::str_option", rename = "settlement_value")]
     pub settlement_value_dollars: Option<Decimal>,

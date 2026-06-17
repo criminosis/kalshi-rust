@@ -37,6 +37,11 @@ pub enum KalshiWebsocketResponse {
         sid: u32,
         msg: KalshiEventLifecycleMessage,
     },
+    /// Emitted when an event-level fee override is set or cleared
+    EventFeeUpdate {
+        sid: u32,
+        msg: EventFeeUpdateMessage,
+    },
     /// Multivariate collection lookup notification.
     MultivariateLookup {
         sid: u32,
@@ -321,6 +326,13 @@ pub struct KalshiEventLifecycleMessage {
     pub series_ticker: String,
     pub strike_date: Option<i64>,
     pub strike_period: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct EventFeeUpdateMessage {
+    pub event_ticker: String,
+    pub fee_type_override: String,
+    pub fee_multiplier_override: f64,
 }
 
 #[derive(Deserialize, Debug, Clone)]

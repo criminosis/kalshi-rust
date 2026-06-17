@@ -131,9 +131,9 @@ impl Kalshi {
     }
 
     /// Creates a new order.
-    pub async fn create_order(&self, payload: CreateOrderPayload) -> Result<Order, KalshiError> {
+    pub async fn create_order(&self, payload: &CreateOrderPayload) -> Result<Order, KalshiError> {
         let url = self.build_url("/portfolio/orders")?;
-        let resp: SingleOrderResponse = self.http_post(url, &payload).await?;
+        let resp: SingleOrderResponse = self.http_post(url, payload).await?;
         Ok(resp.order)
     }
 

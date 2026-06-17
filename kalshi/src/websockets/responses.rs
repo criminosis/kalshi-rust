@@ -277,21 +277,21 @@ pub struct KalshiMarketLifecycleV2Message {
     pub event_type: KalshiMarketLifecycleV2Event,
     pub market_ticker: String,
 
-    #[serde(with = "chrono::serde::ts_seconds_option")]
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub open_ts: Option<DateTime<Utc>>,
 
-    #[serde(with = "chrono::serde::ts_seconds_option")]
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub close_ts: Option<DateTime<Utc>>,
 
     pub result: Option<SettlementResult>,
 
-    #[serde(with = "chrono::serde::ts_seconds_option")]
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub determination_ts: Option<DateTime<Utc>>,
 
     #[serde(with = "rust_decimal::serde::str_option", rename = "settlement_value")]
     pub settlement_value_dollars: Option<Decimal>,
 
-    #[serde(with = "chrono::serde::ts_seconds_option")]
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub settled_ts: Option<DateTime<Utc>>,
     pub is_deactivated: Option<bool>,
     pub yes_sub_title: Option<String>,

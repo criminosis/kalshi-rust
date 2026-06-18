@@ -37,6 +37,11 @@ pub enum KalshiWebsocketResponse {
         sid: u32,
         msg: KalshiEventLifecycleMessage,
     },
+    /// Emitted when an event-level fee override is set or cleared
+    EventFeeUpdate {
+        sid: u32,
+        msg: EventFeeUpdateMessage,
+    },
     /// Multivariate collection lookup notification.
     MultivariateLookup {
         sid: u32,
@@ -276,20 +281,21 @@ pub struct KalshiMarketLifecycleV2Message {
     pub event_type: KalshiMarketLifecycleV2Event,
     pub market_ticker: String,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub open_ts: DateTime<Utc>,
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
+    pub open_ts: Option<DateTime<Utc>>,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub close_ts: DateTime<Utc>,
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
+    pub close_ts: Option<DateTime<Utc>>,
+
     pub result: Option<SettlementResult>,
 
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub determination_ts: DateTime<Utc>,
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
+    pub determination_ts: Option<DateTime<Utc>>,
 
-    #[serde(with = "rust_decimal::serde::str_option", rename = "settlement_value")]
+    #[serde(default, with = "rust_decimal::serde::str_option", rename = "settlement_value")]
     pub settlement_value_dollars: Option<Decimal>,
 
-    #[serde(with = "chrono::serde::ts_seconds_option")]
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub settled_ts: Option<DateTime<Utc>>,
     pub is_deactivated: Option<bool>,
     pub yes_sub_title: Option<String>,
@@ -324,6 +330,13 @@ pub struct KalshiEventLifecycleMessage {
     pub series_ticker: String,
     pub strike_date: Option<i64>,
     pub strike_period: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct EventFeeUpdateMessage {
+    pub event_ticker: String,
+    pub fee_type_override: String,
+    pub fee_multiplier_override: f64,
 }
 
 #[derive(Deserialize, Debug, Clone)]

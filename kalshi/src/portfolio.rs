@@ -425,7 +425,7 @@ pub struct Order {
     pub last_update_time: Option<String>,
     pub r#type: String,
     pub order_group_id: Option<String>,
-    pub self_trade_prevention_type: String,
+    pub self_trade_prevention_type: Option<String>,
     pub subaccount_number: Option<u32>,
 }
 

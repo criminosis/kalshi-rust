@@ -393,7 +393,7 @@ where
 #[derive(Debug, Serialize)]
 pub struct CreateOrderV2Payload {
     pub ticker: String,
-    pub side: Side,
+    pub side: BookSide,
 
     #[serde(serialize_with = "serialize_decimal_two_places")]
     pub count: Decimal,

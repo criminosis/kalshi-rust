@@ -139,8 +139,8 @@ impl Kalshi {
 
     pub async fn create_order_v2(&self, payload: &CreateOrderV2Payload) -> Result<OrderV2, KalshiError> {
         let url = self.build_url("/portfolio/events/orders")?;
-        let resp: SingleOrderV2Response = self.http_post(url, payload).await?;
-        Ok(resp.order)
+        let resp: OrderV2 = self.http_post(url, payload).await?;
+        Ok(resp)
     }
 
     /// Batch cancels multiple orders.
@@ -282,11 +282,6 @@ pub struct BalanceResponse {
 #[derive(Debug, Deserialize)]
 struct SingleOrderResponse {
     pub order: Order,
-}
-
-#[derive(Debug, Deserialize)]
-struct SingleOrderV2Response {
-    pub order: OrderV2,
 }
 
 #[serde_as]

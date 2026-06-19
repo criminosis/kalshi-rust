@@ -228,7 +228,7 @@ pub struct Market {
     pub expiration_time: Option<String>,
     pub latest_expiration_time: String,
     pub settlement_timer_seconds: i64,
-    pub status: String,
+    pub status: MarketStatusResponse,
     #[deprecated]
     pub response_price_units: String,
     pub yes_bid_dollars: Option<String>,
@@ -372,4 +372,19 @@ pub enum MarketStatus {
     Open,
     Closed,
     Settled,
+    Unopened,
+    Paused,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum MarketStatusResponse {
+    Initialized, 
+    Inactive, 
+    Active, 
+    Closed, 
+    Determined, 
+    Disputed, 
+    Amended, 
+    Finalized 
 }

@@ -223,10 +223,7 @@ pub struct Market {
     pub updated_time: DateTime<Utc>,
     pub open_time: DateTime<Utc>,
     pub close_time: DateTime<Utc>,
-
-    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub expected_expiration_time: Option<DateTime<Utc>>,
-
     pub latest_expiration_time: DateTime<Utc>,
     pub settlement_timer_seconds: i64,
     pub status: MarketStatusResponse,
@@ -252,8 +249,6 @@ pub struct Market {
     pub settlement_value_dollars: Option<String>,
     pub settlement_ts: Option<String>,
     pub expiration_value: String,
-
-    #[serde(default, with = "chrono::serde::ts_seconds_option")]
     pub fee_waiver_expiration_time: Option<DateTime<Utc>>,
     pub early_close_condition: Option<String>,
     pub strike_type: Option<String>,
@@ -386,4 +381,18 @@ pub enum MarketStatusResponse {
     Disputed, 
     Amended, 
     Finalized 
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{fs, path::PathBuf, str::FromStr};
+
+use super::*;
+
+    #[test]
+    fn test_deserialized_events_response() {
+        let path = PathBuf::from_str(env!("CARGO_MANIFEST_DIR")).unwrap().join("test_resources/events_response.json");
+        let json_body = fs::read_to_string(path).unwrap();
+        let _resp: PublicEventsResponse = serde_json::from_str(&json_body).unwrap();
+    }
 }

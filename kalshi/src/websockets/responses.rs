@@ -220,6 +220,10 @@ pub struct KalshiTradeMessage {
 
     pub taker_side: KalshiSide,
 
+    pub taker_outcome_side: KalshiSide,
+
+    pub taker_book_side: BookSide,
+
     #[serde(with = "chrono::serde::ts_milliseconds")]
     pub ts_ms: DateTime<Utc>,
 }

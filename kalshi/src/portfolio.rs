@@ -1,8 +1,8 @@
 use super::Kalshi;
 use crate::kalshi_error::*;
 use chrono::{DateTime, Utc};
-use rust_decimal::{Decimal, prelude::FromPrimitive};
-use serde::{Deserialize, Deserializer, Serialize};
+use rust_decimal::{Decimal, RoundingStrategy, prelude::FromPrimitive};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_with::serde_as;
 use std::fmt;
 
@@ -134,6 +134,12 @@ impl Kalshi {
     pub async fn create_order(&self, payload: &CreateOrderPayload) -> Result<Order, KalshiError> {
         let url = self.build_url("/portfolio/orders")?;
         let resp: SingleOrderResponse = self.http_post(url, payload).await?;
+        Ok(resp.order)
+    }
+
+    pub async fn create_order_v2(&self, payload: &CreateOrderV2Payload) -> Result<OrderV2, KalshiError> {
+        let url = self.build_url("/portfolio/events/orders")?;
+        let resp: SingleOrderV2Response = self.http_post(url, payload).await?;
         Ok(resp.order)
     }
 
@@ -278,6 +284,11 @@ struct SingleOrderResponse {
     pub order: Order,
 }
 
+#[derive(Debug, Deserialize)]
+struct SingleOrderV2Response {
+    pub order: OrderV2,
+}
+
 #[serde_as]
 #[derive(Debug, Deserialize)]
 struct MultipleOrderResponse {
@@ -368,6 +379,56 @@ pub struct CreateOrderPayload {
     pub subaccount: Option<u32>,
 }
 
+fn serialize_decimal_two_places<S>(value: &Decimal, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    // Round mathematically using Round Half Away From Zero
+    let rounded = value.round_dp_with_strategy(2, RoundingStrategy::MidpointAwayFromZero);
+    
+    // Serializes as a precise float value due to the "serde-float" feature flag
+    Serialize::serialize(&rounded, serializer)
+}
+
+#[derive(Debug, Serialize)]
+pub struct CreateOrderV2Payload {
+    pub ticker: String,
+    pub side: BookSide,
+
+    #[serde(serialize_with = "serialize_decimal_two_places")]
+    pub count: Decimal,
+
+    #[serde(serialize_with = "serialize_decimal_two_places")]
+    pub price: Decimal,
+
+    pub time_in_force: String,
+    pub self_trade_prevention_type: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_order_id: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<i64>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub post_only: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancel_order_on_pause: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reduce_only: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subaccount: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_group_id: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exchange_index: Option<u32>,
+}
+
 #[derive(Debug, Deserialize)]
 struct BatchCancelOrdersResponse {
     pub orders: Vec<BatchCancelOrdersIndividualResponse>,
@@ -427,6 +488,29 @@ pub struct Order {
     pub order_group_id: Option<String>,
     pub self_trade_prevention_type: Option<String>,
     pub subaccount_number: Option<u32>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct OrderV2 {
+    pub order_id: String,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub fill_count: Decimal,
+
+    #[serde(with = "rust_decimal::serde::str")]
+    pub remaining_count: Decimal,
+
+    #[serde(with = "chrono::serde::ts_milliseconds")]
+    pub ts_ms: DateTime<Utc>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_order_id: Option<String>,
+
+    #[serde(default, with = "rust_decimal::serde::str_option")]
+    pub average_fill_price: Option<Decimal>,
+
+    #[serde(default, with = "rust_decimal::serde::str_option")]
+    pub average_fee_paid: Option<Decimal>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]

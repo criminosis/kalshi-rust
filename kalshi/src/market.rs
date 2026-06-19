@@ -219,18 +219,17 @@ pub struct Market {
     pub title: Option<String>,
     pub yes_sub_title: String,
     pub no_sub_title: String,
-    pub created_time: String,
-    pub updated_time: String,
-    pub open_time: String,
-    pub close_time: String,
-    pub expected_expiration_time: Option<String>,
-    #[deprecated]
-    pub expiration_time: Option<String>,
-    pub latest_expiration_time: String,
+    pub created_time: DateTime<Utc>,
+    pub updated_time: DateTime<Utc>,
+    pub open_time: DateTime<Utc>,
+    pub close_time: DateTime<Utc>,
+
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
+    pub expected_expiration_time: Option<DateTime<Utc>>,
+
+    pub latest_expiration_time: DateTime<Utc>,
     pub settlement_timer_seconds: i64,
     pub status: MarketStatusResponse,
-    #[deprecated]
-    pub response_price_units: String,
     pub yes_bid_dollars: Option<String>,
     pub yes_bid_size_fp: Option<String>,
     pub yes_ask_dollars: Option<String>,
@@ -253,10 +252,10 @@ pub struct Market {
     pub settlement_value_dollars: Option<String>,
     pub settlement_ts: Option<String>,
     pub expiration_value: String,
-    pub fee_waiver_expiration_time: Option<String>,
+
+    #[serde(default, with = "chrono::serde::ts_seconds_option")]
+    pub fee_waiver_expiration_time: Option<DateTime<Utc>>,
     pub early_close_condition: Option<String>,
-    #[deprecated]
-    pub tick_size: Option<i64>,
     pub strike_type: Option<String>,
     pub floor_strike: Option<f64>,
     pub cap_strike: Option<f64>,

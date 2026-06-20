@@ -212,7 +212,7 @@ async fn kalshi_ws_handler(
                 }
             }
             _ = heartbeat.tick().fuse() => {
-                if let Err(e) = stream.send(Message::Ping(vec![])).await {
+                if let Err(e) = stream.send(Message::Ping(vec![].into())).await {
                     from_kalshi_tx.send(Err(KalshiWebsocketError::WebSocketError(e.to_string())));
                 }
             }

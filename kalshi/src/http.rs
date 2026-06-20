@@ -39,6 +39,17 @@ impl Kalshi {
         headers
     }
 
+    pub async fn api_usage_level(&self) -> Result<reqwest::Response, KalshiError> {
+        let url = self.build_url("/account/api_usage_level/upgrade")?;
+        self
+            .client
+            .post(url.clone())
+            .headers(self.auth_headers(url.path(), Method::POST))
+            .send()
+            .await
+            .map_err(|e| KalshiError::RequestError(RequestError::ClientError(e)))
+    }
+
     pub async fn http_get<T: DeserializeOwned>(&self, url: Url) -> Result<T, KalshiError> {
         let resp = self
             .client

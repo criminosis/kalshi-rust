@@ -275,7 +275,9 @@ pub struct BalanceResponse {
     pub balance: i64,
     #[serde(with = "rust_decimal::serde::str")]
     pub balance_dollars: Decimal,
-    pub portfolio_value: i64,
+
+    #[serde(deserialize_with = "cents_to_dollars")]
+    pub portfolio_value: Decimal,
     pub updated_ts: i64,
 }
 

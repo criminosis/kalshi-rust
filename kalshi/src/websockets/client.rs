@@ -98,7 +98,7 @@ impl<'a> KalshiWebsocketClient {
 
         let (to_kalshi_tx, to_kalshi_rx) = unbounded_channel::<KalshiCommand>();
         let (from_kalshi_tx, from_kalshi_rx) =
-            channel::<Result<KalshiWebsocketResponse, KalshiWebsocketError>>(1024);
+            channel::<Result<KalshiWebsocketResponse, KalshiWebsocketError>>(1024 * 10);
 
         let _ws = tokio::spawn(kalshi_ws_handler(ws_stream, from_kalshi_tx, to_kalshi_rx));
 

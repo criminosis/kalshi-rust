@@ -123,6 +123,7 @@ impl Kalshi {
         event_ticker: Option<String>,
         series_ticker: Option<String>,
         max_close_ts: Option<i64>,
+        tickers: Option<String>
     ) -> Result<(Vec<crate::market::Market>, Option<String>), KalshiError> {
         let mut params = Vec::new();
         add_param!(params, "limit", limit);
@@ -130,6 +131,7 @@ impl Kalshi {
         add_param!(params, "event_ticker", event_ticker);
         add_param!(params, "series_ticker", series_ticker);
         add_param!(params, "max_close_ts", max_close_ts);
+        add_param!(params, "tickers", tickers);
 
         let url = self.build_url_with_params("/historical/markets", params)?;
         let resp: HistoricalMarketsResponse = self.http_get(url).await?;
